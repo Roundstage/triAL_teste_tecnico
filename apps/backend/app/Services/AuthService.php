@@ -11,7 +11,7 @@ class AuthService
     public function registrar(array $dados): array
     {
         $usuario = Usuario::create(array_merge($dados, [
-            'status'         => EnumStatusUsuario::Ativo,
+            'status' => EnumStatusUsuario::Ativo,
             'data_expiracao' => now()->addDays(7)->toDateString(),
         ]));
 
@@ -24,7 +24,17 @@ class AuthService
     {
         $token = auth('api')->attempt(['email' => $email, 'password' => $senha]);
 
-        return $token ?: null;
+        if (! $token) {
+            return null;
+        }
+
+        if (auth('api')->user()->status === EnumStatusUsuario::Expirado) {
+            auth('api')->logout();
+
+            return null;
+        }
+
+        return $token;
     }
 
     public function encerrarSessao(): void

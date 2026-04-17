@@ -78,6 +78,31 @@ make artisan cmd="…"  Roda qualquer comando artisan
 make composer cmd="…" Roda qualquer comando composer
 make npm cmd="…"      Roda qualquer comando npm no frontend
 ```
+### Testando a expiração de usuários
+
+```bash
+# Criar usuário com data de expiração no passado
+make artisan cmd="tinker --execute 'App\Models\Usuario::factory()->create([\"data_expiracao\" => now()->subDays(3), \"status\" => \"ativo\"]);'"
+
+# Despachar o job manualmente
+make artisan cmd="tinker --execute 'dispatch(new App\Jobs\ExpirarUsuariosJob());'"
+
+# Processar a fila (executa o job despachado)
+make artisan cmd="queue:work --once"
+
+# Simular o agendamento diário (use --force fora do horário agendado)
+make artisan cmd="schedule:run --force"
+```
+
+---
+
+## Testes
+
+```bash
+make test-backend
+```
+
+41 testes, 80 assertions — cobrindo register, login, logout, me, expiração de usuários e regras de validação customizadas.
 
 ---
 
@@ -124,13 +149,3 @@ A API segue uma arquitetura em camadas com separação clara de responsabilidade
 | `GET` | `/api/auth/me` | ✓ | Dados do usuário autenticado |
 
 > Documentação técnica completa em [`docs/backend.md`](docs/backend.md).
-
----
-
-## Testes
-
-```bash
-make test-backend
-```
-
-41 testes, 80 assertions — cobrindo register, login, logout, me, expiração de usuários e regras de validação customizadas.

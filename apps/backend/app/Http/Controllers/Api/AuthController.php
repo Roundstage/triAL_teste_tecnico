@@ -22,10 +22,11 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request): JsonResponse
     {
-        $token = $this->authService->autenticar($request->email, $request->senha);
+        $data = $request->validated();
+        $token = $this->authService->autenticar($data['email'], $data['senha']);
 
-        if (!$token) {
-            return response()->json(['message' => 'Credenciais inválidas.'], 401);
+        if (! $token) {
+            return response()->json(['message' => 'Credenciais inválidas ou conta expirada.'], 401);
         }
 
         return response()->json(['token' => $token, 'usuario' => auth('api')->user()]);

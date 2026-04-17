@@ -14,7 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withSchedule(function (Schedule $schedule): void {
-        $schedule->job(ExpirarUsuariosJob::class)->dailyAt('00:00');
+        $schedule->job(ExpirarUsuariosJob::class)->dailyAt('00:00')->withoutOverlapping();
     })
     ->withMiddleware(function (Middleware $middleware): void {
         //
