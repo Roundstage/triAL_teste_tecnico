@@ -42,7 +42,7 @@ export default defineRouter((/* { store, ssrContext } */) => {
     }
 
     if (to.meta.guest && isAuthenticated) {
-      return { path: '/app' };
+      return { path: '/home' };
     }
   });
 

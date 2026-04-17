@@ -16,7 +16,7 @@ const routes: RouteRecordRaw[] = [
     meta: { guest: true },
   },
   {
-    path: '/app',
+    path: '/home',
     component: () => import('layouts/MainLayout.vue'),
     meta: { requiresAuth: true },
     children: [{ path: '', component: () => import('pages/IndexPage.vue') }],

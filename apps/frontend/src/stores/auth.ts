@@ -32,10 +32,10 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  async function fetchUser(): Promise<void> {
+  async function fetchMe(): Promise<void> {
     if (!token.value) return;
     user.value = await authService.me();
   }
 
-  return { token, user, isAuthenticated, login, register, logout, fetchUser };
+  return { token, user, isAuthenticated, login, register, logout, fetchMe };
 });

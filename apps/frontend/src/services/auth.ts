@@ -20,6 +20,7 @@ export interface AuthUser {
   email: string;
   telefone: string;
   data_nascimento: string;
+  data_expiracao: string | null;
   status: string;
 }
 
