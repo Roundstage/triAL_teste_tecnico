@@ -4,7 +4,8 @@ export
 .PHONY: help up down build restart logs logs-backend logs-frontend \
         shell-backend shell-frontend shell-db \
         artisan composer migrate migrate-fresh seed key test-backend \
-        npm quasar quasar-dev quasar-build quasar-lint quasar-format
+        npm quasar quasar-dev quasar-build quasar-lint quasar-format \
+        test-frontend test-frontend-ui test-frontend-report
 
 help: ## Show available commands
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -86,3 +87,12 @@ quasar-lint: ## Lint frontend source
 
 quasar-format: ## Format frontend source
 	docker compose exec frontend npm run format
+
+test-frontend: ## Run Playwright e2e tests (headless)
+	cd apps/frontend && npm test
+
+test-frontend-ui: ## Run Playwright e2e tests with UI
+	cd apps/frontend && npm run test:ui
+
+test-frontend-report: ## Open last Playwright HTML report
+	cd apps/frontend && npm run test:report

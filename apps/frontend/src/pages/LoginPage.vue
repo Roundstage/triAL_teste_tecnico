@@ -99,7 +99,7 @@ async function onSubmit() {
   loading.value = true;
   try {
     await authStore.login(email.value, senha.value);
-    await router.push('/app');
+    await router.push('/home');
   } catch (e: unknown) {
     const err = e as { response?: { status?: number } };
     if (err.response?.status === 401) {

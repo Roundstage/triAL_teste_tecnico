@@ -27,3 +27,30 @@ boost.json
 opencode.json
 AGENTS.md
 CLAUDE.md
+
+# ── Frontend ──────────────────────────────────────────────────────────────────
+
+apps/frontend/node_modules/
+apps/frontend/dist/
+apps/frontend/.quasar/
+
+# Playwright
+apps/frontend/playwright-report/
+apps/frontend/test-results/
+apps/frontend/blob-report/
+apps/frontend/.playwright/
+
+# ── Backend ───────────────────────────────────────────────────────────────────
+
+apps/backend/vendor/
+
+# Laravel storage (gerado em runtime)
+apps/backend/storage/logs/*.log
+apps/backend/storage/framework/cache/
+apps/backend/storage/framework/sessions/
+apps/backend/storage/framework/views/
+apps/backend/bootstrap/cache/*.php
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+
+*.log

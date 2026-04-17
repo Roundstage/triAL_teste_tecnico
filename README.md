@@ -98,11 +98,40 @@ make artisan cmd="schedule:run --force"
 
 ## Testes
 
+### Backend (Pest)
+
 ```bash
 make test-backend
 ```
 
 41 testes, 80 assertions — cobrindo register, login, logout, me, expiração de usuários e regras de validação customizadas.
+
+### Frontend (Playwright)
+
+> **Pré-requisito:** Node.js instalado na máquina host (os testes rodam fora do container).
+
+```bash
+cd apps/frontend
+
+# Instalar dependências (caso ainda não tenha feito)
+npm install
+npx playwright install chromium
+```
+
+```bash
+# Rodar os testes (inicia o dev server automaticamente)
+make test-frontend
+
+# Rodar com interface visual do Playwright
+make test-frontend-ui
+
+# Ver relatório HTML após a execução
+make test-frontend-report
+```
+
+Os testes mockam toda a API com `page.route()` — o backend **não precisa** estar rodando.
+
+Cobertura: login (erros 401/429/500, sucesso, redirect), cadastro (validação, erros backend), home (guard de rota, dados do usuário, logout, 404).
 
 ---
 

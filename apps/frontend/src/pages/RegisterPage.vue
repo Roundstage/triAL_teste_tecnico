@@ -159,7 +159,7 @@ async function onSubmit() {
       ...form,
       data_nascimento: formatarData(form.data_nascimento),
     });
-    await router.push('/app');
+    await router.push('/home');
   } catch (e: unknown) {
     const err = e as { response?: { status?: number; data?: { message?: string; errors?: Record<string, string[]> } } };
     if (err.response?.status === 422) {

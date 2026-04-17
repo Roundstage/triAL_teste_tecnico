@@ -5,6 +5,7 @@ import {
   createWebHashHistory,
   createWebHistory,
 } from 'vue-router';
+import { Notify } from 'quasar';
 import routes from './routes';
 
 /*
@@ -38,6 +39,12 @@ export default defineRouter((/* { store, ssrContext } */) => {
     const isAuthenticated = !!token;
 
     if (to.meta.requiresAuth && !isAuthenticated) {
+      Notify.create({
+        type: 'warning',
+        message: 'Faça login para acessar esta página.',
+        position: 'top',
+        timeout: 3000,
+      });
       return { path: '/login' };
     }
 
