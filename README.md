@@ -43,13 +43,28 @@ Na primeira execução, o entrypoint de cada container faz automaticamente:
 
 ### 3. Acessar
 
-| Serviço  | URL                        |
-|----------|----------------------------|
-| Frontend | http://localhost:9000       |
-| Backend  | http://localhost:8000       |
-| Banco    | `localhost:5432` (psql)     |
+| Serviço  | URL                                          |
+|----------|----------------------------------------------|
+| Frontend | http://localhost:9000                        |
+| Backend  | http://localhost:8000                        |
+| Swagger  | http://localhost:8000/api/documentation      |
+| Banco    | `localhost:5432` (psql)                      |
 
 > As portas podem ser alteradas via `.env` (`FRONTEND_PORT`, `BACKEND_PORT`, `DB_EXPOSED_PORT`).
+
+---
+
+## Documentação da API (Swagger)
+
+A documentação OpenAPI é gerada automaticamente durante o `make up` e fica disponível em:
+
+**http://localhost:8000/api/documentation**
+
+Para regenerar manualmente após alterar anotações:
+
+```bash
+make artisan cmd="l5-swagger:generate"
+```
 
 ---
 

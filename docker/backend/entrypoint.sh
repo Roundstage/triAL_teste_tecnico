@@ -30,5 +30,8 @@ fi
 echo "==> Running migrations..."
 php artisan migrate --force --no-interaction
 
+echo "==> Generating OpenAPI docs..."
+php artisan l5-swagger:generate --no-interaction
+
 echo "==> Starting Laravel on 0.0.0.0:8000..."
 exec php artisan serve --host=0.0.0.0 --port=8000
