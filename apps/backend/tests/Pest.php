@@ -15,7 +15,7 @@ use Tests\TestCase;
 */
 
 pest()->extend(TestCase::class)
- // ->use(RefreshDatabase::class)
+    ->use(RefreshDatabase::class)
     ->in('Feature');
 
 /*
@@ -44,7 +44,14 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function usuarioPayload(array $override = []): array
 {
-    // ..
+    return array_merge([
+        'nome'               => 'João Silva',
+        'email'              => 'joao@gmail.com',
+        'senha'              => 'senha123',
+        'senha_confirmation' => 'senha123',
+        'telefone'           => '11987654321',
+        'data_nascimento'    => '1990-06-15',
+    ], $override);
 }

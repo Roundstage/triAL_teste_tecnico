@@ -103,10 +103,34 @@ triAL_teste_tecnico/
 
 ---
 
+## Arquitetura do Backend
+
+A API segue uma arquitetura em camadas com separação clara de responsabilidades:
+
+- **Controller** — apenas HTTP (recebe request, devolve response)
+- **Service** — lógica de negócio (`AuthService`, `ExpirarUsuariosService`)
+- **Form Request** — validação desacoplada com regras customizadas
+- **Job + Scheduler** — expiração automática de usuários via fila, agendada diariamente
+
+**Autenticação** via `tymon/jwt-auth` — stateless, sem sessões no servidor. Token enviado no header `Authorization: Bearer <token>`.
+
+### Endpoints
+
+| Método | Rota | Auth | Descrição |
+|---|---|---|---|
+| `POST` | `/api/auth/register` | — | Cria usuário, retorna JWT |
+| `POST` | `/api/auth/login` | — | Autentica, retorna JWT |
+| `POST` | `/api/auth/logout` | ✓ | Invalida o token |
+| `GET` | `/api/auth/me` | ✓ | Dados do usuário autenticado |
+
+> Documentação técnica completa em [`docs/backend.md`](docs/backend.md).
+
+---
+
 ## Testes
 
 ```bash
 make test-backend
 ```
 
-Roda a suíte Pest diretamente no container do backend.
+41 testes, 80 assertions — cobrindo register, login, logout, me, expiração de usuários e regras de validação customizadas.
