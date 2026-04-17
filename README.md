@@ -6,7 +6,7 @@ Aplicação full-stack com **Laravel 13** (API/backend) e **Quasar/Vue 3** (fron
 
 | Camada    | Tecnologia                     |
 |-----------|-------------------------------|
-| Backend   | PHP 8.3 + Laravel 13           |
+| Backend   | PHP 8.4 + Laravel 13           |
 | Frontend  | Vue 3 + Quasar 2 + TypeScript  |
 | Banco     | PostgreSQL 17                  |
 | Infra     | Docker Compose + Make          |
@@ -28,7 +28,7 @@ Aplicação full-stack com **Laravel 13** (API/backend) e **Quasar/Vue 3** (fron
 cp .env.example .env
 ```
 
-Edite `.env` se quiser trocar portas ou credenciais do banco. O `APP_KEY` **não precisa** ser preenchido manualmente — o container gera automaticamente.
+Edite `.env` se quiser trocar portas ou credenciais do banco. O `APP_KEY` é gerado automaticamente pelo container se estiver vazio. O `JWT_SECRET` é configurado em `apps/backend/.env`.
 
 ### 2. Subir os containers
 
@@ -104,7 +104,7 @@ make artisan cmd="schedule:run --force"
 make test-backend
 ```
 
-41 testes, 80 assertions — cobrindo register, login, logout, me, expiração de usuários e regras de validação customizadas.
+42 testes, 82 assertions — cobrindo register, login, logout, me, expiração de usuários e regras de validação customizadas.
 
 ### Frontend (Playwright)
 
@@ -150,7 +150,7 @@ triAL_teste_tecnico/
 └── .env.example
 ```
 
-- O **backend** expõe suas rotas em `http://localhost:8000`. A variável `VITE_API_URL` no frontend aponta para esse endereço.
+- O **backend** expõe suas rotas em `http://localhost:8000`. A variável `VITE_API_BASE_URL` no frontend aponta para esse endereço (com `/api` no sufixo).
 - O **frontend** roda o servidor de desenvolvimento do Quasar em `http://localhost:9000`.
 - O **banco** usa um volume Docker (`postgres_data`) para persistir os dados entre reinicializações.
 - As dependências (`vendor`, `node_modules`) ficam em volumes nomeados separados, evitando conflitos com o sistema de arquivos do host.
@@ -177,4 +177,4 @@ A API segue uma arquitetura em camadas com separação clara de responsabilidade
 | `POST` | `/api/auth/logout` | ✓ | Invalida o token |
 | `GET` | `/api/auth/me` | ✓ | Dados do usuário autenticado |
 
-> Documentação técnica completa em [`docs/backend.md`](docs/backend.md).
+> Documentação técnica completa em [`docs/backend.md`](docs/backend.md) e [`docs/frontend.md`](docs/frontend.md).

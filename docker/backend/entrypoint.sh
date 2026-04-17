@@ -12,9 +12,19 @@ npm install --no-fund --no-audit
 echo "==> Setting storage permissions..."
 chmod -R 775 storage bootstrap/cache
 
+echo "==> Preparing .env..."
+if [ ! -f .env ]; then
+    cp .env.example .env
+fi
+
 echo "==> Generating app key..."
 if [ -z "$APP_KEY" ]; then
     php artisan key:generate --no-interaction
+fi
+
+echo "==> Generating JWT secret..."
+if ! grep -q '^JWT_SECRET=.\+' .env; then
+    php artisan jwt:secret --no-interaction --force
 fi
 
 echo "==> Running migrations..."

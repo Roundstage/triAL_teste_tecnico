@@ -24,12 +24,6 @@ services:
       SESSION_DRIVER: database
       CACHE_STORE: database
       QUEUE_CONNECTION: database
-      JWT_SECRET: ${JWT_SECRET}
-      JWT_ALGO: ${JWT_ALGO:-HS256}
-      JWT_TTL: ${JWT_TTL:-60}
-      JWT_REFRESH_TTL: ${JWT_REFRESH_TTL:-20160}
-      JWT_BLACKLIST_ENABLED: ${JWT_BLACKLIST_ENABLED:-true}
-      JWT_BLACKLIST_GRACE_PERIOD: ${JWT_BLACKLIST_GRACE_PERIOD:-0}
       FRONTEND_URL: http://localhost:${FRONTEND_PORT:-9000}
     depends_on:
       db:
