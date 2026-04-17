@@ -30,6 +30,7 @@ services:
       JWT_REFRESH_TTL: ${JWT_REFRESH_TTL:-20160}
       JWT_BLACKLIST_ENABLED: ${JWT_BLACKLIST_ENABLED:-true}
       JWT_BLACKLIST_GRACE_PERIOD: ${JWT_BLACKLIST_GRACE_PERIOD:-0}
+      FRONTEND_URL: http://localhost:${FRONTEND_PORT:-9000}
     depends_on:
       db:
         condition: service_healthy
@@ -44,7 +45,7 @@ services:
       - ./apps/frontend:/app
       - frontend_node_modules:/app/node_modules
     environment:
-      VITE_API_URL: http://localhost:${BACKEND_PORT:-8000}
+      VITE_API_BASE_URL: http://localhost:${BACKEND_PORT:-8000}/api
 
   db:
     image: postgres:17-alpine

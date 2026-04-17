@@ -11,7 +11,9 @@ class EnsureUsuarioAtivo
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth('api')->user()->status === EnumStatusUsuario::Expirado) {
+        $usuario = auth('api')->user();
+
+        if (! $usuario || $usuario->status === EnumStatusUsuario::Expirado) {
             return response()->json(['message' => 'Conta expirada.'], 403);
         }
 
