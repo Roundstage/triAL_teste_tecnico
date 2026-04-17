@@ -11,7 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-#[Fillable(['nome', 'email', 'senha', 'telefone', 'status', 'data_expiracao'])]
+#[Fillable(['nome', 'email', 'senha', 'telefone', 'data_nascimento', 'status', 'data_expiracao'])]
 #[Hidden(['senha'])]
 class Usuario extends Authenticatable implements JWTSubject
 {
@@ -23,9 +23,10 @@ class Usuario extends Authenticatable implements JWTSubject
     protected function casts(): array
     {
         return [
-            'data_expiracao' => 'date',
-            'senha'          => 'hashed',
-            'status'         => EnumStatusUsuario::class,
+            'data_nascimento' => 'date',
+            'data_expiracao'  => 'date',
+            'senha'           => 'hashed',
+            'status'          => EnumStatusUsuario::class,
         ];
     }
 

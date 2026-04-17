@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api;
 
+use App\Rules\DataNascimentoRule;
 use App\Rules\TelefoneRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -21,6 +22,7 @@ class RegisterRequest extends FormRequest
             'senha'              => ['required', 'string', 'min:6', 'confirmed'],
             'senha_confirmation' => ['required'],
             'telefone'           => ['required', 'string', new TelefoneRule],
+            'data_nascimento'    => ['required', 'date', new DataNascimentoRule],
         ];
     }
 }
