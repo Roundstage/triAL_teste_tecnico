@@ -8,10 +8,12 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/login',
     component: () => import('pages/LoginPage.vue'),
+    meta: { guest: true },
   },
   {
     path: '/app',
     component: () => import('layouts/MainLayout.vue'),
+    meta: { requiresAuth: true },
     children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
   },
 

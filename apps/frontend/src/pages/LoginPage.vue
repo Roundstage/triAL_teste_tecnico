@@ -1,5 +1,12 @@
 <template>
   <div class="login-page">
+    <img
+      src="src/assets/gabriel-santos-GBVDilE8yvI-unsplash.jpg"
+      class="login-page__bg"
+      alt=""
+      aria-hidden="true"
+    />
+
     <div class="login-page__hero">
       <div class="login-page__overlay" />
       <div class="login-page__brand">
@@ -16,7 +23,7 @@
         </q-card-section>
 
         <q-card-section>
-          <q-form @submit.prevent="onSubmit" class="q-gutter-md">
+          <q-form @submit.prevent="onSubmit" class="q-gutter-y-md">
             <q-input
               v-model="email"
               type="email"
@@ -48,6 +55,10 @@
               </template>
             </q-input>
 
+            <q-banner v-if="erro" dense rounded class="text-white bg-negative q-mt-sm">
+              {{ erro }}
+            </q-banner>
+
             <q-btn
               type="submit"
               label="Entrar"
@@ -66,34 +77,63 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useAuthStore } from 'src/stores/auth';
+
+const router = useRouter();
+const authStore = useAuthStore();
 
 const email = ref('');
 const senha = ref('');
 const showSenha = ref(false);
 const loading = ref(false);
+const erro = ref('');
 
 async function onSubmit() {
+  erro.value = '';
   loading.value = true;
-  // TODO: integrar com AuthService
-  await new Promise((r) => setTimeout(r, 800));
-  loading.value = false;
+  try {
+    await authStore.login(email.value, senha.value);
+    await router.push('/app');
+  } catch (e: unknown) {
+    const err = e as { response?: { status?: number } };
+    if (err.response?.status === 401) {
+      erro.value = 'E-mail ou senha inválidos.';
+    } else if (err.response?.status === 429) {
+      erro.value = 'Muitas tentativas. Aguarde um momento.';
+    } else {
+      erro.value = 'Erro ao conectar com o servidor.';
+    }
+  } finally {
+    loading.value = false;
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 .login-page {
+  position: relative;
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
+
+  &__bg {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center bottom;
+    z-index: 0;
+  }
 
   &__hero {
     position: relative;
     flex: 1 1 60%;
-    background-image: url('src/assets/gabriel-santos-GBVDilE8yvI-unsplash.jpg');
-    background-size: cover;
-    background-position: center;
     display: flex;
     align-items: flex-end;
     padding: 48px;
+    z-index: 1;
   }
 
   &__overlay {
@@ -108,12 +148,14 @@ async function onSubmit() {
   }
 
   &__form-side {
+    position: relative;
     flex: 0 0 420px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: #fff;
     padding: 48px 40px;
+    z-index: 1;
   }
 
   &__card {
@@ -124,16 +166,25 @@ async function onSubmit() {
 
 @media (max-width: 768px) {
   .login-page {
-    flex-direction: column;
+    &__bg {
+      filter: blur(6px) brightness(0.6);
+      transform: scale(1.1);
+    }
 
     &__hero {
-      flex: 0 0 220px;
-      padding: 32px 24px;
+      display: none;
     }
 
     &__form-side {
       flex: 1;
-      padding: 32px 24px;
+      background: transparent;
+      padding: 24px 32px;
+    }
+
+    &__card {
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 4px 32px rgba(0, 0, 0, 0.18);
+      border-radius: 16px;
     }
   }
 }
