@@ -4,7 +4,7 @@ export
 .PHONY: help up down build restart logs logs-backend logs-frontend \
         shell-backend shell-frontend shell-db \
         artisan composer migrate migrate-fresh seed key test-backend \
-        npm
+        npm quasar quasar-dev quasar-build quasar-lint quasar-format
 
 help: ## Show available commands
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -71,3 +71,18 @@ test-backend: ## Run backend test suite
 
 npm: ## Run npm command in frontend  →  make npm cmd="install pkg"
 	docker compose exec frontend npm $(cmd)
+
+quasar: ## Run quasar command  →  make quasar cmd="new page Home"
+	docker compose exec frontend npx quasar $(cmd)
+
+quasar-dev: ## Start Quasar dev server
+	docker compose exec frontend npx quasar dev
+
+quasar-build: ## Build Quasar for production
+	docker compose exec frontend npx quasar build
+
+quasar-lint: ## Lint frontend source
+	docker compose exec frontend npm run lint
+
+quasar-format: ## Format frontend source
+	docker compose exec frontend npm run format
