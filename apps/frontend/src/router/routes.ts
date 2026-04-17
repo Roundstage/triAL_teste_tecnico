@@ -11,6 +11,11 @@ const routes: RouteRecordRaw[] = [
     meta: { guest: true },
   },
   {
+    path: '/cadastro',
+    component: () => import('pages/RegisterPage.vue'),
+    meta: { guest: true },
+  },
+  {
     path: '/app',
     component: () => import('layouts/MainLayout.vue'),
     meta: { requiresAuth: true },

@@ -13,6 +13,19 @@ class RegisterRequest extends FormRequest
         return true;
     }
 
+    /** @return array<string, string> */
+    public function attributes(): array
+    {
+        return [
+            'nome'               => 'nome',
+            'email'              => 'e-mail',
+            'senha'              => 'senha',
+            'senha_confirmation' => 'confirmação de senha',
+            'telefone'           => 'telefone',
+            'data_nascimento'    => 'data de nascimento',
+        ];
+    }
+
     /** @return array<string, mixed> */
     public function rules(): array
     {

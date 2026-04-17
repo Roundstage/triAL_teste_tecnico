@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import { authService, type AuthUser } from 'src/services/auth';
+import { authService, type AuthUser, type RegisterCredentials } from 'src/services/auth';
 
 export const useAuthStore = defineStore('auth', () => {
   const token = ref<string | null>(localStorage.getItem('auth_token'));
@@ -8,11 +8,18 @@ export const useAuthStore = defineStore('auth', () => {
 
   const isAuthenticated = computed(() => !!token.value);
 
-  async function login(email: string, password: string): Promise<void> {
-    const response = await authService.login({ email, senha: password });
-    token.value = response.access_token;
-    localStorage.setItem('auth_token', response.access_token);
-    user.value = await authService.me();
+  async function login(email: string, senha: string): Promise<void> {
+    const response = await authService.login({ email, senha });
+    token.value = response.token;
+    localStorage.setItem('auth_token', response.token);
+    user.value = response.usuario;
+  }
+
+  async function register(dados: RegisterCredentials): Promise<void> {
+    const response = await authService.register(dados);
+    token.value = response.token;
+    localStorage.setItem('auth_token', response.token);
+    user.value = response.usuario;
   }
 
   async function logout(): Promise<void> {
@@ -30,5 +37,5 @@ export const useAuthStore = defineStore('auth', () => {
     user.value = await authService.me();
   }
 
-  return { token, user, isAuthenticated, login, logout, fetchUser };
+  return { token, user, isAuthenticated, login, register, logout, fetchUser };
 });

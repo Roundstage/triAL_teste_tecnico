@@ -5,21 +5,37 @@ export interface LoginCredentials {
   senha: string;
 }
 
+export interface RegisterCredentials {
+  nome: string;
+  email: string;
+  senha: string;
+  senha_confirmation: string;
+  telefone: string;
+  data_nascimento: string;
+}
+
 export interface AuthUser {
   id: number;
-  name: string;
+  nome: string;
   email: string;
+  telefone: string;
+  data_nascimento: string;
+  status: string;
 }
 
 export interface AuthResponse {
-  access_token: string;
-  token_type: string;
-  expires_in: number;
+  token: string;
+  usuario: AuthUser;
 }
 
 export const authService = {
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
     const { data } = await api.post<AuthResponse>('/auth/login', credentials);
+    return data;
+  },
+
+  async register(credentials: RegisterCredentials): Promise<AuthResponse> {
+    const { data } = await api.post<AuthResponse>('/auth/register', credentials);
     return data;
   },
 

@@ -68,6 +68,11 @@
               unelevated
               :loading="loading"
             />
+
+            <div class="text-center text-body2 text-grey-7">
+              Não tem uma conta?
+              <router-link to="/cadastro" class="text-primary text-weight-medium">Criar conta</router-link>
+            </div>
           </q-form>
         </q-card-section>
       </q-card>
