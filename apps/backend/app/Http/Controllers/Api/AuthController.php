@@ -3,45 +3,34 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Enums\EnumStatusUsuario;
+use App\Http\Requests\Api\LoginRequest;
+use App\Http\Requests\Api\RegisterRequest;
+use App\Models\Usuario;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-    public function register(Request $request): JsonResponse
+    public function register(RegisterRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+        $usuario = Usuario::create(array_merge($request->validated(), [
+            'status'         => EnumStatusUsuario::Ativo,
+            'data_expiracao' => now()->addDays(7)->toDateString(),
+        ]));
 
-        $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-        ]);
+        $token = JWTAuth::fromUser($usuario);
 
-        $token = JWTAuth::fromUser($user);
-
-        return response()->json(compact('token', 'user'), 201);
+        return response()->json(['token' => $token, 'usuario' => $usuario], 201);
     }
 
-    public function login(Request $request): JsonResponse
+    public function login(LoginRequest $request): JsonResponse
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'string', 'email'],
-            'password' => ['required', 'string'],
-        ]);
-
-        if (! $token = auth('api')->attempt($credentials)) {
-            return response()->json(['message' => 'Invalid credentials.'], 401);
+        if (! $token = auth('api')->attempt(['email' => $request->email, 'password' => $request->senha])) {
+            return response()->json(['message' => 'Credenciais inválidas.'], 401);
         }
 
-        return response()->json(['token' => $token, 'user' => auth('api')->user()]);
+        return response()->json(['token' => $token, 'usuario' => auth('api')->user()]);
     }
 
     public function logout(): JsonResponse
