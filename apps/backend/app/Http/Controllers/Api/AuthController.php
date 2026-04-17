@@ -3,30 +3,28 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Enums\EnumStatusUsuario;
 use App\Http\Requests\Api\LoginRequest;
 use App\Http\Requests\Api\RegisterRequest;
-use App\Models\Usuario;
+use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
+    public function __construct(private readonly AuthService $authService) {}
+
     public function register(RegisterRequest $request): JsonResponse
     {
-        $usuario = Usuario::create(array_merge($request->validated(), [
-            'status'         => EnumStatusUsuario::Ativo,
-            'data_expiracao' => now()->addDays(7)->toDateString(),
-        ]));
-
-        $token = JWTAuth::fromUser($usuario);
-
-        return response()->json(['token' => $token, 'usuario' => $usuario], 201);
+        return response()->json(
+            $this->authService->registrar($request->validated()),
+            201
+        );
     }
 
     public function login(LoginRequest $request): JsonResponse
     {
-        if (! $token = auth('api')->attempt(['email' => $request->email, 'password' => $request->senha])) {
+        $token = $this->authService->autenticar($request->email, $request->senha);
+
+        if (!$token) {
             return response()->json(['message' => 'Credenciais inválidas.'], 401);
         }
 
@@ -35,9 +33,9 @@ class AuthController extends Controller
 
     public function logout(): JsonResponse
     {
-        auth('api')->logout();
+        $this->authService->encerrarSessao();
 
-        return response()->json(['message' => 'Logged out successfully.']);
+        return response()->json(['message' => 'Sessão encerrada.']);
     }
 
     public function me(): JsonResponse
