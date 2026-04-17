@@ -28,7 +28,7 @@ api.interceptors.response.use(
       localStorage.removeItem('auth_token');
       window.location.href = '/#/login';
     }
-    return Promise.reject(error);
+    return Promise.reject(error instanceof Error ? error : new Error(String(error)));
   },
 );
 
